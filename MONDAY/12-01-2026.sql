@@ -99,3 +99,10 @@ SELECT
 FROM FACEBOOK_EMPLOYEES AS FE
 INNER JOIN FACEBOOK_HACK_SURVEY AS FHK ON FE.ID = FHK.EMPLOYEE_ID
 GROUP BY FE.LOCATION
+
+/*Calculate the percentage of users who are both from the US and have an 'open' status, as indicated in the fb_active_users table.*/
+SELECT
+    (SUM
+    (CASE WHEN status = 'open' AND COUNTRY = 'USA' THEN 1 END) * 100.0 / COUNT(*)
+    ) AS open_user_percentage
+FROM FB_ACTIVE_USERS;
