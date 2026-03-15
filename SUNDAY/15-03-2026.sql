@@ -82,3 +82,73 @@ FROM (
     FROM exam_results
 ) as ranked_exams
 WHERE position = 1
+
+/*
+You are given three tables: customer, orders, and seller.
+
+customer table:
+
+Column Name	Type
+customer_id	int
+customer_name	varchar
+The customer_id column is the primary key. Each row contains information about a customer in the store.
+
+orders table:
+
+Column Name	Type
+order_id	int
+sale_date	date
+order_cost	int
+customer_id	int
+seller_id	int
+The order_id column is the primary key. Each row represents a transaction between a customer and a seller on a given date.
+
+seller table:
+
+Column Name	Type
+seller_id	int
+seller_name	varchar
+The seller_id column is the primary key. Each row contains information about a seller.
+
+Write a query to find the names of all sellers who did not make any sales in the year 2020.
+
+Return the result ordered by seller_name in ascending order.
+*/
+
+SELECT
+    seller_name
+FROM seller
+WHERE seller_id NOT IN (
+    SELECT seller_id from orders where sale_date between '2020-01-01' AND '2020-12-31'
+)
+ORDER BY seller_name asc
+
+/*
+Given two tables, users and rides, write a query to calculate the total distance traveled by each user.
+
+users table:
+
+Column Name	Type
+id	int
+name	varchar
+The id column is the primary key. This table contains user information including their unique ID and name.
+
+rides table:
+
+Column Name	Type
+id	int
+user_id	int
+distance	int
+The id column is the primary key. Each row represents a trip where user_id indicates who took the trip and distance is how far they traveled.
+Write a SQL query that reports the total distance each user has traveled. Return the results sorted by travelled_distance in descending order.
+If multiple users have the same total distance, sort them by name in ascending order
+
+*/
+SELECT
+    u.name,
+    COALESCE(SUM(r.distance),0)  AS travelled_distance
+FROM users AS u
+LEFT JOIN rides AS r
+ON u.id = r.user_id
+GROUP BY u.name
+ORDER BY travelled_distance DESC
