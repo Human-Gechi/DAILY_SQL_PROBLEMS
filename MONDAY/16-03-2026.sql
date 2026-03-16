@@ -86,3 +86,41 @@ SELECT
 FROM expressions as e
 JOIN variables as lva ON lva.name = e.left_operand
 JOIN variables as rva ON rva.name = e.right_operand
+
+/*
+Calculate the net change in the number of products launched by companies in 2020 compared to 2019.
+Your output should include the company names and the net difference.
+(Net difference = Number of products launched in 2020 - The number launched in 2019.)
+
+Table
+car_launches
+
+*/
+WITH products_2020 AS (
+    SELECT
+        company_name,
+        COUNT( DISTINCT product_name) as product_count_2020
+    FROM car_launches
+    WHERE year = 2020
+    GROUP BY company_name
+),
+
+products_2019 AS (
+SELECT
+    company_name,
+    COUNT(DISTINCT product_name) AS product_count_2019
+    FROM car_launches
+    WHERE year = 2019
+    GROUP BY company_name
+)
+
+SELECT
+    p_2019.company_name,
+    (P_2020.product_count_2020 - p_2019.product_count_2019) as net_products
+FROM products_2019 AS p_2019
+FULL OUTER JOIN products_2020 AS p_2020
+ON p_2019.company_name = p_2020.company_name
+GROUP BY p_2019.company_name, p_2020.product_count_2020, p_2019.product_count_2019
+
+
+
