@@ -41,6 +41,17 @@ WITH RECURSIVE PATTERN AS (
 SELECT RPAD('*', n * 2 - 1, ' *')
 FROM PATTERN;
 
+-- Another method
+WITH RECURSIVE pascal_stars AS (
+    SELECT 20 as n
+    union all
+    SELECT n - 1
+    FROM pascal_stars
+    WHERE n > 1
+)
+
+SELECT REPEAT(' *', n) FROM pascal_stars
+
 /*P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
 
 *
@@ -58,3 +69,14 @@ WITH RECURSIVE PATTERN AS (
 SELECT RPAD('*', n * 2 - 1, ' *')
 FROM PATTERN
 ORDER BY n ASC;
+
+-- Another method
+WITH RECURSIVE pascal_stars AS (
+    SELECT 1 as n
+    union all
+    SELECT n + 1
+    FROM pascal_stars
+    WHERE n < 20
+)
+
+SELECT REPEAT('* ', n) FROM pascal_stars;
